@@ -1,15 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { BiUser, BiEdit, BiHeart, BiHistory, BiCamera } from 'react-icons/bi';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import MovieCard from '../components/common/MovieCard';
 
 const Profile = () => {
   const { user, fetchUser, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('favorites');
+  const [activeTab, setActiveTab] = useState('watchlist');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
+  const [watchlistMovies, setWatchlistMovies] = useState([]);
+  const [loadingWatchlist, setLoadingWatchlist] = useState(false);
+
+  useEffect(() => {
+    const fetchWatchlistMovies = async () => {
+      if (activeTab === 'watchlist') {
+        try {
+          setLoadingWatchlist(true);
+          const { data } = await api.get('/auth/watchlist');
+          const movieIds = data.watchlist || [];
+          
+          const moviePromises = movieIds.map(id => api.get(`/home/movies/${id}`));
+          const movieResponses = await Promise.all(moviePromises);
+          
+          const movies = movieResponses.map(res => res.data.movie).filter(Boolean);
+          setWatchlistMovies(movies);
+        } catch (error) {
+          console.error('Error fetching watchlist:', error);
+          toast.error('Failed to load watchlist');
+        } finally {
+          setLoadingWatchlist(false);
+        }
+      }
+    };
+
+    fetchWatchlistMovies();
+  }, [activeTab]);
 
   const handleProfilePicUpload = async (e) => {
     const file = e.target.files[0];
@@ -68,16 +96,10 @@ const Profile = () => {
             
             <div className="flex flex-col gap-2 text-left">
               <button 
-                onClick={() => setActiveTab('favorites')}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'favorites' ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:bg-white/5 text-text-secondary'}`}
+                onClick={() => setActiveTab('watchlist')}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'watchlist' ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:bg-white/5 text-text-secondary'}`}
               >
-                <BiHeart size={20} /> Favorites
-              </button>
-              <button 
-                onClick={() => setActiveTab('history')}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'history' ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:bg-white/5 text-text-secondary'}`}
-              >
-                <BiHistory size={20} /> Watch History
+                <BiHeart size={20} /> Watchlist
               </button>
               <button 
                 onClick={() => setActiveTab('settings')}
@@ -92,30 +114,25 @@ const Profile = () => {
         {/* Main Content */}
         <div className="w-full md:w-2/3 lg:w-3/4">
           <div className="luxury-card p-8 min-h-[500px]">
-            {activeTab === 'favorites' && (
+            {activeTab === 'watchlist' && (
               <div>
-                <h3 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">My Favorites</h3>
-                {user?.favorites?.length > 0 ? (
+                <h3 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">My Watchlist</h3>
+                {loadingWatchlist ? (
+                  <div className="flex justify-center py-20">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                  </div>
+                ) : watchlistMovies.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {/* Map through favorites and show Mini Movie Cards - placeholder for now */}
-                    <div className="text-text-secondary">Movie cards would go here</div>
+                    {watchlistMovies.map(movie => (
+                      <MovieCard key={movie._id} movie={movie} />
+                    ))}
                   </div>
                 ) : (
                   <div className="text-center py-20 text-text-secondary">
                     <BiHeart size={48} className="mx-auto mb-4 opacity-50" />
-                    <p>You haven't added any favorites yet.</p>
+                    <p>You haven't added any movies to your watchlist yet.</p>
                   </div>
                 )}
-              </div>
-            )}
-            
-            {activeTab === 'history' && (
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Watch History</h3>
-                <div className="text-center py-20 text-text-secondary">
-                  <BiHistory size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>Your watch history will appear here.</p>
-                </div>
               </div>
             )}
 

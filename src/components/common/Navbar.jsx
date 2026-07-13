@@ -41,27 +41,27 @@ const Navbar = () => {
               <Link to="/filter" className="hover:text-white transition-colors">Filter</Link>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-6">
             <div className="relative flex items-center">
               <form onSubmit={handleSearchSubmit} className={`transition-all duration-300 overflow-hidden ${isSearchOpen ? 'w-48 md:w-64 opacity-100 mr-2' : 'w-0 opacity-0'}`}>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search titles, genres..." 
+                  placeholder="Search titles, genres..."
                   className="w-full bg-white/10 border border-white/20 rounded-full py-1.5 px-4 text-sm text-white focus:outline-none focus:border-primary placeholder:text-white/50"
                   autoFocus={isSearchOpen}
                 />
               </form>
-              <button 
-                onClick={() => setIsSearchOpen(!isSearchOpen)} 
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="text-white hover:text-primary transition-colors z-10"
               >
                 <BiSearch size={24} />
               </button>
             </div>
-            
+
             {user ? (
               <div className="flex items-center gap-4">
                 <Link to="/profile" className="flex items-center gap-2 text-sm hover:text-white transition-colors text-text-secondary">

@@ -6,6 +6,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
 import { useMovie } from '../contexts/MovieContext';
+import { useAuth } from '../contexts/AuthContext';
 import MovieRow from '../components/common/MovieRow';
 
 const MovieDetails = () => {
@@ -17,6 +18,7 @@ const MovieDetails = () => {
   const [recommendedNames, setRecommendedNames] = useState([]);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const { movies } = useMovie();
+  const { user, fetchUser } = useAuth();
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -76,6 +78,28 @@ const MovieDetails = () => {
     }
   };
 
+  const isWatchlisted = user?.favorites?.includes(id);
+
+  const handleWatchlistToggle = async () => {
+    if (!user) {
+      toast.error('Please login to add to watchlist');
+      return;
+    }
+    
+    try {
+      if (isWatchlisted) {
+        await api.delete('/auth/remove-from-watchlist', { data: { movieId: id } });
+        toast.success('Removed from watchlist');
+      } else {
+        await api.post('/auth/add-to-watchlist', { movieId: id });
+        toast.success('Added to watchlist');
+      }
+      await fetchUser();
+    } catch (error) {
+      toast.error('Failed to update watchlist');
+    }
+  };
+
   if (loading) return <LoadingSkeleton type="banner" />;
   if (!movie) return <div className="p-8 text-center mt-20">Movie not found</div>;
 
@@ -118,8 +142,12 @@ const MovieDetails = () => {
             <Link to={`/player/${movie._id}`} className="btn-primary w-full shadow-lg shadow-primary/30">
               <BiPlay size={24} /> Play Now
             </Link>
-            <button className="btn-secondary w-full">
-              <BiPlus size={24} /> Add to Watchlist
+            <button 
+              onClick={handleWatchlistToggle}
+              className={`${isWatchlisted ? 'bg-white/10 text-white hover:bg-white/20' : 'btn-secondary'} w-full transition-colors flex items-center justify-center gap-2 py-3 rounded-lg font-medium`}
+            >
+              <BiPlus size={24} className={isWatchlisted ? 'transform rotate-45 transition-transform' : 'transition-transform'} /> 
+              {isWatchlisted ? 'Remove from Watchlist' : 'Add to Watchlist'}
             </button>
           </div>
         </div>
