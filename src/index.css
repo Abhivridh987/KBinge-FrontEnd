@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #E50914;
+  --color-bg: #050505;
+  --color-bg-secondary: #121212;
+  --color-accent: #B71C1C;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B3B3B3;
+
+  --font-sans: "Inter", "Outfit", system-ui, sans-serif;
+  
+  --radius-luxury: 18px;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text-primary font-sans antialiased;
+    margin: 0;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  .glassmorphism {
+    @apply bg-bg-secondary/60 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)];
+  }
+  
+  .luxury-card {
+    @apply rounded-luxury overflow-hidden bg-bg-secondary/60 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(229,9,20,0.2)] hover:-translate-y-1;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-accent text-white font-medium py-3 px-8 rounded-luxury transition-colors duration-300 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-8 rounded-luxury backdrop-blur-md transition-colors duration-300 flex items-center justify-center gap-2;
+  }
+}
