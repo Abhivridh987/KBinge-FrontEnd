@@ -8,10 +8,10 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/auth': 'http://localhost:8080',
-      '/home': 'http://localhost:8080',
-      '/comments': 'http://localhost:8080',
-      '/admin': 'http://localhost:8080'
+      '/auth': 'https://kbinge-backend.onrender.com',
+      '/home': 'https://kbinge-backend.onrender.com',
+      '/comments': 'https://kbinge-backend.onrender.com',
+      '/admin': 'https://kbinge-backend.onrender.com'
     }
   }
 });
