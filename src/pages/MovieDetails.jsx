@@ -43,7 +43,7 @@ const MovieDetails = () => {
     const fetchRecs = async () => {
       if (!movie) return;
       try {
-        const res = await fetch(`http://127.0.0.1:8000/kbinge/recommend/${encodeURIComponent(movie.Name)}`);
+        const res = await fetch(`https://kbinge-recommendation.onrender.com/kbinge/recommend/${encodeURIComponent(movie.Name)}`);
         const data = await res.json();
         if (data.ok && data.data) {
           setRecommendedNames(Object.keys(data.data));
