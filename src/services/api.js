@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
+  baseURL: 'https://kbinge-backend.onrender.com',
   withCredentials: true, // required for cookie-based auth
 });
 
