@@ -66,8 +66,8 @@ const Navbar = () => {
               <div className="flex items-center gap-4">
                 <Link to="/profile" className="flex items-center gap-2 text-sm hover:text-white transition-colors text-text-secondary">
                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border border-white/20">
-                    {user?.profilePic && user?.profilePic !== 'default.webp' ? (
-                      <img src={`/auth/upload/${user.profilePic}`} alt="Profile" className="w-full h-full object-cover" />
+                    {user?.profilePic && user?.profilePic !== 'https://res.cloudinary.com/rtfmu2pg/image/upload/v1784374987/default_hqb1tc.webp' ? (
+                      <img src={user?.profilePic} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <BiUser size={20} className="text-white" />
                     )}
