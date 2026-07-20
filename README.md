@@ -2,6 +2,9 @@
 
 Welcome to the frontend repository for **KBinge**! This is a modern, responsive web application designed to help you discover, track, and binge your favorite shows and dramas.
 
+### 🌐 Live Demo
+The frontend is deployed at Render: **[https://kbinge-frontend.onrender.com/](https://kbinge-frontend.onrender.com/)**
+
 ## 🚀 Tech Stack
 
 Here are the core technologies powering this project:
@@ -12,6 +15,7 @@ Here are the core technologies powering this project:
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=blue)
+![Render](https://img.shields.io/badge/Render-%2346E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 ## 📦 Features
 
